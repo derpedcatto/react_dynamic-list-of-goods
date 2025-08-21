@@ -14,7 +14,7 @@ export const App: React.FC = () => {
 
       setGoods(apiGoods);
     } catch (error) {
-      return;
+      setGoods([]);
     }
   };
 
@@ -24,7 +24,7 @@ export const App: React.FC = () => {
 
       setGoods(apiGoods);
     } catch (error) {
-      return;
+      setGoods([]);
     }
   };
 
@@ -34,7 +34,7 @@ export const App: React.FC = () => {
 
       setGoods(apiGoods);
     } catch (error) {
-      return;
+      setGoods([]);
     }
   };
 
