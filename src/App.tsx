@@ -7,34 +7,54 @@ import { Good } from './types/Good';
 
 export const App: React.FC = () => {
   const [goods, setGoods] = useState<Good[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleLoadAllGoods = async () => {
+    setError(null);
+    setLoading(true);
+
     try {
       const apiGoods = await getAll();
 
       setGoods(apiGoods);
-    } catch (error) {
+    } catch (err) {
       setGoods([]);
+      setError(err instanceof Error ? err.message : 'Failed to load goods');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleLoadFirst5Goods = async () => {
+    setError(null);
+    setLoading(true);
+
     try {
       const apiGoods = await get5First();
 
       setGoods(apiGoods);
-    } catch (error) {
+    } catch (err) {
       setGoods([]);
+      setError(err instanceof Error ? err.message : 'Failed to load goods');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleLoadRedGoods = async () => {
+    setError(null);
+    setLoading(true);
+
     try {
       const apiGoods = await getRedGoods();
 
       setGoods(apiGoods);
-    } catch (error) {
+    } catch (err) {
       setGoods([]);
+      setError(err instanceof Error ? err.message : 'Failed to load goods');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,6 +77,10 @@ export const App: React.FC = () => {
       <button type="button" data-cy="red-button" onClick={handleLoadRedGoods}>
         Load red goods
       </button>
+
+      {error && <p role="alert">{error}</p>}
+
+      {loading && <p>Loading...</p>}
 
       <GoodsList goods={goods} />
     </div>

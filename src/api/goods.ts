@@ -5,20 +5,44 @@ const API_URL = `https://mate-academy.github.io/react_dynamic-list-of-goods/good
 
 const COLOR_RED = 'red';
 
-export function getAll(): Promise<Good[]> {
-  return fetch(API_URL).then(response => response.json());
+export async function getAll(): Promise<Good[]> {
+  try {
+    const response = await fetch(API_URL);
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to load goods: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error('API error');
+  }
 }
 
-export const get5First = () => {
-  return getAll().then(goods => {
-    goods.sort((a, b) => a.name.localeCompare(b.name));
+export const get5First = async () => {
+  try {
+    const goods = await getAll();
 
-    return goods.slice(0, 5);
-  });
+    const sortedGoods = [...goods].sort((a, b) => a.name.localeCompare(b.name));
+
+    return sortedGoods.slice(0, 5);
+  } catch (error) {
+    throw error;
+  }
 };
 
-export const getRedGoods = () => {
-  return getAll().then(goods => {
+export const getRedGoods = async () => {
+  try {
+    const goods = await getAll();
+
     return goods.filter(good => good.color === COLOR_RED);
-  });
+  } catch (error) {
+    throw error;
+  }
 };
